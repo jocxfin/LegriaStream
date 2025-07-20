@@ -10,7 +10,7 @@ import re
 
 CAMERA_IP, CAMERA_PORT = "192.168.0.80", 80
 USER_AGENT = "canonStreamingApp/1.0.0"
-TARGET_FPS = 23.0
+TARGET_FPS = 22.92
 RESTREAM_PORT = 8424
 RESTREAM_PATH = "live/stream"
 ONVIF_PORT = 9858
@@ -137,7 +137,7 @@ class Cam:
         self.zoom_stop_event = threading.Event()
 
     def connect(self, ip=CAMERA_IP, port=CAMERA_PORT):
-        logger.info("=== CONNECTING TO CANON CAMERA ===")
+        logger.info("=== CONNECTING TO CAMERA ===")
         device_xml = f"http://{ip}:{port}/dev/device.xml"
         try:
             resp = self.s.get(device_xml, timeout=10)
@@ -520,7 +520,7 @@ class Cam:
         logger.info("Buffer filled, beginning playback.")
 
         if not self.novid:
-            cv2.namedWindow("Canon Live View", cv2.WINDOW_NORMAL)
+            cv2.namedWindow("Camera Live View", cv2.WINDOW_NORMAL)
 
         frame_counter = 0
         playback_start_time = time.time()
@@ -543,7 +543,7 @@ class Cam:
                     self.ffmpeg_proc.stdin.write(frame.tobytes())
 
                 if not self.novid:
-                    cv2.imshow("Canon Live View", frame)
+                    cv2.imshow("Camera Live View", frame)
                     if cv2.waitKey(1) & 0xFF == ord('q'):
                         self.stop_event.set(); break
                 
@@ -604,10 +604,10 @@ class Cam:
         logger.info("=== SESSION FULLY TERMINATED ===")
 
 if __name__ == "__main__":
-    parser = argparse.ArgumentParser(description="Canon Wi-Fi Live-View Client")
+    parser = argparse.ArgumentParser(description="Camera Wi-Fi Live-View Client")
     parser.add_argument('--novid', action='store_true', help='Run without display window')
     args = parser.parse_args()
-    logger.info("Starting Canon Wi-Fi Live-View Client")
+    logger.info("Starting Camera Wi-Fi Live-View Client")
 
     cam = Cam()
     try:
